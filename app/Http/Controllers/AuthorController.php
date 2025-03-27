@@ -40,11 +40,6 @@ class AuthorController extends Controller
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',  // Optional image
         ]);
 
-
-
-
-
-
         // Create the author and save to the database
         $author = Author::create([
             'first_name' => $request->first_name,

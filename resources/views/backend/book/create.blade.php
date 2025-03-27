@@ -70,8 +70,7 @@
                                                     <option value="">Select an author</option>
                                                     @foreach ($authors as $author)
                                                         <option value="{{ $author->id }}"
-                                                            {{ old('author_id') == $author->id ? 'selected' : '' }}>
-                                                            {{ $author->first_name }} {{ $author->last_name }}</option>
+                                                            {{ old('author_id') == $author->id ? 'selected' : '' }}>{{ $author->first_name }} {{ $author->last_name }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('author_id')
@@ -89,8 +88,7 @@
                                                     <option value="">Select a genre</option>
                                                     @foreach ($genres as $genre)
                                                         <option value="{{ $genre->id }}"
-                                                            {{ old('genre_id') == $genre->id ? 'selected' : '' }}>
-                                                            {{ $genre->name }}</option>
+                                                            {{ old('genre_id') == $genre->id ? 'selected' : '' }}>{{ $genre->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('genre_id')
@@ -156,7 +154,6 @@
                                                 @enderror
                                             </div>
                                         </div>
-
                                     </div>
 
                                     <div class="row">
@@ -186,3 +183,14 @@
         <!-- /.content -->
     </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Listen for the change event on the file input
+        document.getElementById('cover_image').addEventListener('change', function(e) {
+            var fileName = e.target.files[0] ? e.target.files[0].name : 'Choose file'; // Get file name
+            var label = e.target.nextElementSibling; // Select the label next to the input
+            label.textContent = fileName; // Update the label with the file name
+        });
+    });
+</script>

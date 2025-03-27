@@ -54,7 +54,7 @@
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Password</th>
+                                            <th>Phone Number</th>
                                             <th>Profile Image</th>
                                             <th>Created At</th>
                                             <th>Actions</th>
@@ -67,6 +67,7 @@
                                                 </td>
                                                 <td>{{ $author->first_name }} {{ $author->last_name }}</td>
                                                 <td>{{ $author->email }}</td>
+                                                <td>{{ $author->phone_number }}</td>
                                                 <td>
                                                     @if ($author->profile_image)
                                                     <img src="{{ asset($author->profile_image) }}" width="50"

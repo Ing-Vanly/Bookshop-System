@@ -35,13 +35,18 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="profile_image">Profile Image</label>
-                        <input type="file" class="form-control" id="profile_image" name="profile_image">
+                        <label for="profile_image">Cover Image</label>
+                        <div class="custom-file">
+                            <input type="file" name="profile_image"
+                                   class="custom-file-input @error('cover_image') is-invalid @enderror"
+                                   id="cover_image" accept="image/*" onchange="previewImage(event)">
+                            <label class="custom-file-label" for="profile_image">Choose an image</label>
+                        </div>
+                        <!-- Display current profile image if available -->
+                     
                     </div>
 
-                    <div class="form-group">
-                        <img id="current_profile_image" src="" alt="Current Image" width="50">
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -52,8 +57,9 @@
     </div>
 </div>
 
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var editButtons = document.querySelectorAll('.edit-btn');
 
     editButtons.forEach(function(button) {
@@ -63,7 +69,7 @@
             var lastName = this.getAttribute('data-last_name');
             var email = this.getAttribute('data-email');
             var phoneNumber = this.getAttribute('data-phone_number');
-            var profileImage = this.getAttribute('data-profile_image');
+            var profileImage = this.getAttribute('data-profile_image');  // Get the current image URL
 
             // Set values to the modal form fields
             document.getElementById('author_id').value = authorId;
@@ -72,12 +78,7 @@
             document.getElementById('email').value = email;
             document.getElementById('phone_number').value = phoneNumber;
 
-            // If profile image exists, display it
-            if (profileImage) {
-                document.getElementById('current_profile_image').src = "{{ Storage::url('') }}" + profileImage;
-            } else {
-                document.getElementById('current_profile_image').src = "{{ asset('AdminLTE/dist/img/user2-160x160.jpg') }}";
-            }
+
 
             // Change form action to the correct URL with the author ID
             var formAction = "{{ route('author.update', ':id') }}".replace(':id', authorId);
@@ -85,5 +86,4 @@
         });
     });
 });
-
 </script>

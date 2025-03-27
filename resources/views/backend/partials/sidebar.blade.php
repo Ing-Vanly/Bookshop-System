@@ -78,6 +78,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('customer.index') }}" class="nav-link">
+                                <i class="fas fa-users nav-icon"></i> <!-- Changed icon -->
+                                <p>Customer</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('role.index') }}" class="nav-link">
                                 <i class="fas fa-user-shield nav-icon"></i>
                                 <p>Roles</p>
@@ -116,6 +123,32 @@
                             <a href="{{ route('author.index') }}" class="nav-link">
                                 <i class="fas fa-user"></i>
                                 <p>Author</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-book-open"></i>
+                        <p>
+                          Payment & Order
+                          <i class="nav-icon fas fa-cogs"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('order.index')}}" class="nav-link">
+                                <i class="nav-icon fas fa-box"></i>
+                                <p>Order Table</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('orderitem.create')}}" class="nav-link">
+                                <i class="nav-icon fas fa-box"></i>
+                                <p>OrderItem Table</p>
                             </a>
                         </li>
                     </ul>

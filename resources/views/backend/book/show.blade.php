@@ -11,7 +11,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('book.index') }}">Books</a></li>
                             <li class="breadcrumb-item active"><a href="{{ route('book.show', $book->id) }}">View</a></li>
                         </ol>
@@ -28,6 +28,10 @@
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">{{ $book->title }}</h3>
+                                <a href="{{ route('book.edit', $book->id) }}" class="btn btn-primary btn-sm ml-auto float-right">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -54,19 +58,18 @@
                                     </tr>
                                     <tr>
                                         <th>Publication Date</th>
-                                        <td>{{ $book->publication_date ? $book->publication_date: 'N/A' }}</td>
+                                        <td>{{ $book->publication_date ? $book->publication_date : 'N/A' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Cover Image</th>
                                         <td>
                                             @if ($book->cover_image)
-                                            <img src="{{ asset($book->cover_image) }}" width="50"
-                                                alt="Cover image">
-                                        @else
-                                            <img src="{{ asset('AdminLTE/dist/img/user2-160x160.jpg') }}"
-                                                width="50" class="img-circle elevation-2"
-                                                alt="User Image">
-                                        @endif
+                                                <img src="{{ asset($book->cover_image) }}" width="50"
+                                                    alt="Cover image">
+                                            @else
+                                                <img src="{{ asset('AdminLTE/dist/img/user2-160x160.jpg') }}"
+                                                    width="50" class="img-circle elevation-2" alt="User Image">
+                                            @endif
                                         </td>
                                     </tr>
                                     <tr>

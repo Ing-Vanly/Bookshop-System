@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -58,11 +60,12 @@ Route::get('/embed', function () {
     return view('frontend.contact.embed');
 })->name('embed');
 
+// Resource controllers (no need to manually define edit/view routes)
 Route::resource('user', UserController::class);
 Route::resource('role', RoleController::class);
 Route::resource('genre', GenreController::class);
 Route::resource('author', AuthorController::class);
 Route::resource('book', BookController::class);
-
-
-
+Route::resource('customer', CustomerController::class);
+Route::resource('order', OrderController::class);
+Route::resource('orderitem', OrderItemController::class);

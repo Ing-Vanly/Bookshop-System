@@ -70,7 +70,8 @@
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 {{-- <td>{{ $user->password }}</td> --}}
-                                                <td>{{ $user->role ?? 'N/A' }}</td>
+                                                <td>{{ $user->role->name ?? 'N/A' }}</td>
+
                                                 <td>{{ $user->phone_number ?? 'N/A' }}</td>
                                                 <td>
                                                     @if ($user->profile_image)

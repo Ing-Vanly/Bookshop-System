@@ -15,7 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')->paginate(10);
+        $users = User::with('role')->get();
+
         return view('backend.user.index', compact('users'));
     }
 
@@ -35,12 +36,12 @@ class UserController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:8',
                 'role_id' => 'required|exists:roles,id',
                 'phone_number' => 'nullable|string|max:15',
-                'user_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
 
@@ -52,12 +53,16 @@ class UserController extends Controller
                 'phone_number' => $request->phone_number,
             ]);
 
-            // Handle file upload for user profile
-            if ($request->hasFile('user_profile') && $request->file('user_profile')->isValid()) {
-                $file = $request->file('user_profile');
+            if ($request->hasFile('profile_image') && $request->file('profile_image')->isValid()) {
+                // Generate unique filename
+                $file = $request->file('profile_image');
                 $fileName = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('img/user_profiles'), $fileName);
-                $user->user_profile = 'img/user_profiles/' . $fileName;
+
+                // Move file to the public/images/profile-photos directory
+                $file->move(public_path('img/profile_images'), $fileName);
+
+                // Save relative path to database
+                $user->profile_image = 'img/profile_images/' . $fileName;
                 $user->save();
             }
 
@@ -69,6 +74,12 @@ class UserController extends Controller
         }
     }
 
+    public function show($id)
+    {
+       
+        $user = User::findOrFail($id);
+        return view('backend.user.show', compact('user'));
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -91,7 +102,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8|confirmed', // Allow password to be optional
             'role_id' => 'required|exists:roles,id',
             'phone_number' => 'nullable|string|max:15',
-            'user_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = User::findOrFail($id);
@@ -107,26 +118,27 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
         }
         // Handle profile image upload if provided
-        if ($request->hasFile('user_profile') && $request->file('user_profile')->isValid()) {
+        if ($request->hasFile('profile_image') && $request->file('profile_image')->isValid()) {
             // Delete old profile photo if exists
-            if ($user->user_profile) {
-                $oldPath = public_path($user->user_profile);
+            if ($user->profile_image) {
+                $oldPath = public_path($user->profile_image);
                 if (file_exists($oldPath)) {
                     unlink($oldPath); // Delete old image from the server
                 }
             }
 
             // Generate a unique filename
-            $file = $request->file('user_profile');
+            $file = $request->file('profile_image');
             $fileName = time() . '_' . $file->getClientOriginalName();
 
             // Move file to the public/img/profile_images directory
-            $file->move(public_path('img/user_profiles'), $fileName);
+            $file->move(public_path('img/profile_images'), $fileName);
 
             // Save the relative path to the database
-            $user->cover_image = 'img/user_profiles/' . $fileName;
+            $user->profile_image = 'img/profile_images/' . $fileName;
             $user->save();
         }
+
 
         return redirect()->route('user.index')->with('success', 'User updated successfully!');
     }
