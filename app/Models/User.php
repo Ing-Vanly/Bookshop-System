@@ -62,4 +62,5 @@ class User extends Authenticatable
     {
         return $value ? asset('storage/' . $value) : asset('AdminLTE/dist/img/user2-160x160.jpg');
     }
+
 }

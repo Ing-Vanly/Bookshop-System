@@ -105,7 +105,7 @@
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('book.index')}}" class="nav-link">
+                            <a href="{{ route('book.index') }}" class="nav-link">
                                 <i class="fas fa-th-list"></i>
                                 <p>Books Table</p>
                             </a>
@@ -131,24 +131,16 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-book-open"></i>
                         <p>
-                          Payment & Order
-                          <i class="nav-icon fas fa-cogs"></i>
+                            Payment & Order
+                            <i class="nav-icon fas fa-cogs"></i>
                         </p>
                     </a>
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('order.index')}}" class="nav-link">
+                            <a href="{{ route('order.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-box"></i>
                                 <p>Order Table</p>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('orderitem.create')}}" class="nav-link">
-                                <i class="nav-icon fas fa-box"></i>
-                                <p>OrderItem Table</p>
                             </a>
                         </li>
                     </ul>

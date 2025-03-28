@@ -10,7 +10,6 @@ class Customer extends Model
 {
     use HasFactory;
 
-    // Define which attributes are mass assignable
     protected $fillable = [
         'name',
         'email',
@@ -19,9 +18,13 @@ class Customer extends Model
         'phone',
     ];
 
-    // Hash the password before saving
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

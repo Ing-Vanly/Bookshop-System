@@ -29,6 +29,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('AdminLET/dist/css/adminlte.min.cs') }}s">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 </head>
 
@@ -92,6 +93,9 @@
         <script src="{{ asset('AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
         <script src="{{ asset('AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
         <script src="{{ asset('AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
         <script>
             let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         </script>
@@ -186,7 +190,7 @@
                 });
             });
         </script> --}}
-
+        @stack('script')
 </body>
 
 </html>
