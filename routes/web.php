@@ -68,5 +68,6 @@ Route::resource('author', AuthorController::class);
 Route::resource('book', BookController::class);
 Route::resource('customer', CustomerController::class);
 Route::post('/order/get-customer-info', [OrderController::class, 'getCustomerInfor'])->name('order.getCustomerInfor');
+
 Route::resource('order', OrderController::class);
 
