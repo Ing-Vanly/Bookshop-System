@@ -8,12 +8,23 @@ use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Models\Book;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/dashboards', function () {
-    return view('backend.index');
+    $customerCount = Customer::count();
+    $bookCount = Book::count();
+    $booksInStock = Book::where('stock_quantity', '>', 0)->get();
+    return view('backend.index', compact('customerCount','bookCount','booksInStock'));
 })->name('dashboard');
+
+Route::get('/book/in-stock', function () {
+    $booksInStock = Book::where('stock_quantity', '>', 0)->get(); // Get books with stock > 0
+    return view('backend.book.in_stock', compact('booksInStock')); // Ensure this path is correct
+})->name('book.in-stock');
+// Define the route for viewing the book details
 
 
 Route::get('/', function () {
@@ -70,4 +81,3 @@ Route::resource('customer', CustomerController::class);
 Route::post('/order/get-customer-info', [OrderController::class, 'getCustomerInfor'])->name('order.getCustomerInfor');
 
 Route::resource('order', OrderController::class);
-

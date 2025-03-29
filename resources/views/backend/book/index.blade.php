@@ -55,7 +55,7 @@
                                                     <th>ID</th>
                                                     <th>Title</th>
                                                     <th>Price</th>
-                                                    <th>Author</th>
+                                                    <th>Author</th> 
                                                     <th>Genre</th>
                                                     <th>Cover Image</th>
                                                     <th>Stock Quantity</th>

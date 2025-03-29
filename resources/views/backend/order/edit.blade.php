@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <section class="content-header">
             <div class="container-fluid">
-                <h1>Add New Order</h1>
+                <h1>Edit Order</h1>
             </div>
         </section>
 
@@ -24,43 +24,42 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('order.store') }}" method="POST">
+                        <form action="{{ route('order.update', $order->id) }}" method="POST">
                             @csrf
+                            @method('PUT')
 
                             <!-- Customer Info -->
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="customer_id">Customer</label>
-                                    <select name="customer_id" id="customer_id" class="form-control js-customer-select"
-                                        required>
+                                    <select name="customer_id" id="customer_id"  class="form-control js-customer-select" required>
                                         <option value="">Select Customer</option>
                                         @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}"
-                                                {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                                {{ $customer->name }}
+                                            <option value="{{ $customer->id }}" {{ $order->customer_id == $customer->id ? 'selected' : '' }}>
+                                                {{ $customer->id }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>Email</label>
-                                    <input type="email" id="email" class="form-control" readonly>
+                                    <input type="email" id="email" name="email" class="form-control" value="{{ $order->customer->email }}" >
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label>Phone</label>
-                                    <input type="text" id="phone" class="form-control" readonly>
+
+                                    <input type="text" id="phone" name="customer_contact" class="form-control" value="{{ $order->customer->phone }}" >
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Address</label>
-                                    <input type="text" id="address" class="form-control" readonly>
+                                    <input type="text" id="address" name="shipping_address" class="form-control" value="{{ $order->customer->address }}" >
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label>Order Date</label>
-                                    <input type="date" name="order_date" class="form-control"
-                                        value="{{ old('order_date', date('Y-m-d')) }}" required>
+                                    <input type="date" name="order_date" name="order_date" class="form-control" value="{{ $order->order_date }}" >
                                 </div>
                             </div>
 
@@ -79,39 +78,34 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="book-list">
+                                                    @foreach ($order->items as $index => $item)
                                                     <tr class="book-item">
                                                         <td>
-                                                            <select name="books[0][book_id]"
-                                                                class="form-control book-select"
-                                                                onchange="calculateBookTotals()" required>
+                                                            <select name="books[{{ $index }}][book_id]" class="form-control book-select" required>
                                                                 <option value="">Select Book</option>
                                                                 @foreach ($books as $book)
-                                                                    <option value="{{ $book->id }}"
-                                                                        data-price="{{ $book->price }}">{{ $book->title }}
-                                                                        - ${{ number_format($book->price, 2) }}</option>
+                                                                    <option value="{{ $book->id }}" {{ $book->id == $item->book_id ? 'selected' : '' }} data-price="{{ $book->price }}">
+                                                                        {{ $book->title }} - ${{ number_format($book->price, 2) }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <input type="number" name="books[0][quantity]"
-                                                                class="form-control quantity-input" value="1"
-                                                                min="1" oninput="calculateBookTotals()" required>
+                                                            <input type="number" name="books[{{ $index }}][quantity]" class="form-control quantity-input" value="{{ $item->quantity }}" min="1" required>
                                                         </td>
                                                         <td>
-                                                            <input type="text" name="books[0][price]"
-                                                                class="form-control book-price" placeholder="Price" />
+                                                            <input type="text" name="books[{{ $index }}][price]" class="form-control book-price" value="${{ number_format($item->price, 2) }}" readonly/>
                                                         </td>
                                                         <td class="text-center align-middle">
-                                                            <button type="button"
-                                                                class="btn btn-success btn-sm btn-add-book">
+                                                            <button type="button" class="btn btn-success btn-sm btn-add-book">
                                                                 <i class="fa fa-plus"></i>
                                                             </button>
-                                                            <button type="button"
-                                                                class="btn btn-danger btn-sm remove-book">
+                                                            <button type="button" class="btn btn-danger btn-sm remove-book">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </td>
                                                     </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -124,11 +118,8 @@
                                 <div class="form-group col-md-6">
                                     <label>Order Status</label>
                                     <select name="order_status" class="form-control js-order-status" required>
-                                        <option value="">Select Status</option>
                                         @foreach (['pending', 'processing', 'completed', 'cancelled'] as $status)
-                                            <option value="{{ $status }}"
-                                                {{ old('order_status') == $status ? 'selected' : '' }}
-                                                style="color: {{ $status == 'completed' ? 'green' : ($status == 'cancelled' ? 'red' : 'black') }};">
+                                            <option value="{{ $status }}" {{ $order->order_status == $status ? 'selected' : '' }}>
                                                 {{ ucfirst($status) }}
                                             </option>
                                         @endforeach
@@ -137,11 +128,8 @@
                                 <div class="form-group col-md-6">
                                     <label>Payment Status</label>
                                     <select name="payment_status" class="form-control js-order-status" required>
-                                        <option value="">Select Payment</option>
                                         @foreach (['unpaid', 'paid', 'refunded'] as $status)
-                                            <option value="{{ $status }}"
-                                                {{ old('payment_status') == $status ? 'selected' : '' }}
-                                                style="color: {{ $status == 'paid' ? 'green' : ($status == 'refunded' ? 'orange' : 'black') }};">
+                                            <option value="{{ $status }}" {{ $order->payment_status == $status ? 'selected' : '' }}>
                                                 {{ ucfirst($status) }}
                                             </option>
                                         @endforeach
@@ -154,79 +142,46 @@
                                 <button type="submit" class="btn btn-success">Save Order</button>
                                 <a href="{{ route('order.index') }}" class="btn btn-secondary">Cancel</a>
                             </div>
-
                         </form>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-@endsection
 
-@push('script')
+    @push('script')
     <script>
-         const customers = @json($customers->mapWithKeys(fn($c) => [
-        $c->id => [
-            'address' => $c->address,
-            'email' => $c->email,
-            'phone' => $c->phone
-        ]
-    ]));
-
-        $(document).ready(function() {
-            // Initialize customer and order status select elements
-            $('.js-customer-select').select2({
-                placeholder: 'Select a customer',
-                width: '100%'
-            });
-            $('.js-order-status').select2({
-                minimumResultsForSearch: -1
-            });
-
-            // Update customer information when a customer is selected
-            $('#customer_id').on('change', function() {
-                const customer = customers[$(this).val()];
-                $('#address').val(customer ? customer.address : '');
-                $('#email').val(customer ? customer.email : '');
-                $('#phone').val(customer ? customer.phone : '');
-            });
-
-            // Trigger change event on page load if a customer is already selected
-            if ($('#customer_id').val()) {
-                $('#customer_id').trigger('change');
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all the book items
             const bookList = document.querySelector('#book-list');
 
-            // Function to add a new book row
+            // Add a new book row
             function addBookRow(index) {
                 const newRow = document.createElement('tr');
                 newRow.classList.add('book-item');
                 newRow.innerHTML = `
-                <td>
-                    <select name="books[${index}][book_id]" class="form-control book-select" required>
-                        <option value="">Select Book</option>
-                        @foreach ($books as $book)
-                            <option value="{{ $book->id }}" data-price="{{ $book->price }}">{{ $book->title }} - ${{ number_format($book->price, 2) }}</option>
-                        @endforeach
-                    </select>
-                </td>
-                <td>
-                    <input type="number" name="books[${index}][quantity]" class="form-control quantity-input" value="1" min="1" required>
-                </td>
-                <td>
-                    <input type="text" name="books[${index}][price]" class="form-control book-price" placeholder="Price" />
-                </td>
-                <td class="text-center align-middle">
-                    <button type="button" class="btn btn-success btn-sm btn-add-book">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                    <button type="button" class="btn btn-danger btn-sm remove-book">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </td>
+                    <td>
+                        <select name="books[${index}][book_id]" class="form-control book-select" required>
+                            <option value="">Select Book</option>
+                            @foreach ($books as $book)
+                                <option value="{{ $book->id }}" data-price="{{ $book->price }}">{{ $book->title }} - ${{ number_format($book->price, 2) }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="books[${index}][quantity]" class="form-control quantity-input" value="1" min="1" required>
+                    </td>
+                    <td>
+                        <input type="text" name="books[${index}][price]" class="form-control book-price" placeholder="Price" readonly />
+                    </td>
+                    <td class="text-center align-middle">
+                        <button type="button" class="btn btn-success btn-sm btn-add-book">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm remove-book">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
                 `;
                 bookList.appendChild(newRow);
                 attachEventListeners(newRow);
@@ -238,30 +193,25 @@
                 const removeBookBtn = row.querySelector('.remove-book');
 
                 // Add event listener for adding a new book
-                addBookBtn.addEventListener('click', function() {
+                addBookBtn.addEventListener('click', function () {
                     const index = bookList.children.length;
                     addBookRow(index);
                 });
 
                 // Add event listener for removing a book
-                removeBookBtn.addEventListener('click', function() {
+                removeBookBtn.addEventListener('click', function () {
                     row.remove();
-                    calculateBookTotals();
                 });
             }
 
             // Initialize the first book row
-            attachEventListeners(bookList.children[0]);
-
-            // Calculate totals when quantity or book selection changes
-            bookList.addEventListener('input', function(e) {
-                if (e.target.name.includes('[quantity]')) {
-                    calculateBookTotals();
-                }
+            bookList.querySelectorAll('.book-item').forEach(function (row, index) {
+                attachEventListeners(row);
             });
 
-            bookList.addEventListener('change', function(e) {
-                if (e.target.classList.contains('book-select')) {
+            // Calculate totals when quantity or book selection changes
+            bookList.addEventListener('input', function (e) {
+                if (e.target.name.includes('[quantity]') || e.target.name.includes('[book_id]')) {
                     calculateBookTotals();
                 }
             });
@@ -274,8 +224,7 @@
                     const priceField = item.querySelector('.book-price');
 
                     if (select && qtyInput && priceField) {
-                        const unitPrice = parseFloat(select.options[select.selectedIndex].getAttribute(
-                            'data-price')) || 0;
+                        const unitPrice = parseFloat(select.options[select.selectedIndex]?.getAttribute('data-price')) || 0;
                         const quantity = parseInt(qtyInput.value) || 1;
                         priceField.value = `$${(unitPrice * quantity).toFixed(2)}`;
                     }
@@ -286,4 +235,5 @@
             calculateBookTotals();
         });
     </script>
-@endpush
+    @endpush
+@endsection

@@ -42,10 +42,6 @@ class OrderController extends Controller
             'order_date' => 'required|date',
             'order_status' => 'required|string',
             'payment_status' => 'required|string',
-            // 'books' => 'required|array|min:1',
-            // 'books.*.book_id' => 'required|exists:books,id',
-            // 'books.*.quantity' => 'required|integer|min:1',
-            // 'books.*.price' => 'required|string',
         ]);
 
         $customer = Customer::findOrFail($request->customer_id);
@@ -86,7 +82,6 @@ class OrderController extends Controller
         return redirect()->route('order.index')->with('success', 'Order placed successfully!');
     }
 
-
     // 4. Show single order details
     public function show(Order $order)
     {
@@ -99,29 +94,48 @@ class OrderController extends Controller
     {
         $order->load('items.book');
         $books = Book::all();
-        return view('backend.order.edit', compact('order', 'books'));
+        $customers = Customer::all();
+
+        return view('backend.order.edit', compact('order', 'books', 'customers'));
     }
 
     // 6. Update the order
     public function update(Request $request, Order $order)
     {
+        // Validate the incoming request data
         $request->validate([
-            'customer_name' => 'required|string',
-            'shipping_address' => 'required|string',
+            'customer_id' => 'required|string',
             'order_status' => 'required|string',
             'payment_status' => 'required|string',
+            'shipping_address' => 'required|string',
         ]);
 
+        // Update the order details
         $order->update([
-            'customer_name' => $request->customer_name,
+            'customer_id' => $request->customer_id,
             'customer_contact' => $request->customer_contact,
             'shipping_address' => $request->shipping_address,
             'order_status' => $request->order_status,
             'payment_status' => $request->payment_status,
         ]);
 
-        return redirect()->route('order.index')->with('success', 'Order updated!');
+        // Recalculate the total amount for the order
+        $totalAmount = 0;
+        foreach ($request->books as $bookData) {
+            $book = Book::find($bookData['book_id']);
+            $quantity = (int) $bookData['quantity'];
+            $price = floatval(str_replace(['$', ','], '', $bookData['price']));
+
+            // Add book price * quantity to total
+            $totalAmount += $price * $quantity;
+        }
+
+        // Update the total amount of the order
+        $order->update(['total_amount' => $totalAmount]);
+
+        return redirect()->route('order.index')->with('success', 'Order updated successfully!');
     }
+
 
     // 7. Delete the order
     public function destroy(Order $order)
@@ -131,6 +145,7 @@ class OrderController extends Controller
             $item->book->increment('stock_quantity', $item->quantity);
         }
 
+        // Delete the order and its items
         $order->delete();
 
         return redirect()->route('order.index')->with('success', 'Order deleted.');

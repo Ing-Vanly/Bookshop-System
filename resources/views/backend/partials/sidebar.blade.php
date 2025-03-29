@@ -51,13 +51,13 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-
+{{--
                         <li class="nav-item">
                             <a href="./index.html" class="nav-link">
                                 <i class="fas fa-credit-card nav-icon"></i>
                                 <p>Payments</p>
                             </a>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </li>
@@ -141,6 +141,15 @@
                             <a href="{{ route('order.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-box"></i>
                                 <p>Order Table</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('order.index') }}" class="nav-link">
+                                <i class="fas fa-credit-card nav-icon"></i>
+
+                                <p>Payment</p>
                             </a>
                         </li>
                     </ul>
