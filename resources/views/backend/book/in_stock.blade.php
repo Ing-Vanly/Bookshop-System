@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('content')
-    <div class="container">
+<div class="container" style="margin-left: 400px;"> <!-- Add margin-left to shift content right -->
         <h3 class="text-center my-4">Books In Stock</h3>
         <div class="row">
             @foreach ($booksInStock as $book)

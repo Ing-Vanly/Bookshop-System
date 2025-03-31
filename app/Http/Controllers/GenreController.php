@@ -12,7 +12,8 @@ class GenreController extends Controller
     {
         $genres = Genre::all();  // Get all genres
         // $genres = Genre::paginate(10);
-        return view('backend.genre.index', compact('genres'));
+        $totalGenres = Genre::count(); // Count all genres in the genres table
+        return view('backend.genre.index', compact('genres', 'totalGenres'));
     }
 
 

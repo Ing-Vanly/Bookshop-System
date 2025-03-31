@@ -100,6 +100,7 @@ class OrderController extends Controller
     }
 
     // 6. Update the order
+    // 6. Update the order
     public function update(Request $request, Order $order)
     {
         // Validate the incoming request data
@@ -119,22 +120,41 @@ class OrderController extends Controller
             'payment_status' => $request->payment_status,
         ]);
 
-        // Recalculate the total amount for the order
+        // Recalculate the total amount for the order and update the order items
         $totalAmount = 0;
+        $updatedBookIds = [];
+
         foreach ($request->books as $bookData) {
             $book = Book::find($bookData['book_id']);
             $quantity = (int) $bookData['quantity'];
             $price = floatval(str_replace(['$', ','], '', $bookData['price']));
 
-            // Add book price * quantity to total
+            // Update or create the order item
+            $order->items()->updateOrCreate(
+                ['book_id' => $book->id],
+                ['quantity' => $quantity, 'price' => $price]
+            );
+
+            // Add to total amount and update the stock quantity
             $totalAmount += $price * $quantity;
+            $updatedBookIds[] = $book->id;
+
+            // Decrement the stock of the book
+            $book->decrement('stock_quantity', $quantity);
         }
 
-        // Update the total amount of the order
+        // Update the order with the total amount
         $order->update(['total_amount' => $totalAmount]);
+
+        // Optionally, handle removed books by restoring stock
+        $order->items()->whereNotIn('book_id', $updatedBookIds)->each(function ($item) {
+            $item->book->increment('stock_quantity', $item->quantity);
+            $item->delete();
+        });
 
         return redirect()->route('order.index')->with('success', 'Order updated successfully!');
     }
+
 
 
     // 7. Delete the order
@@ -168,5 +188,29 @@ class OrderController extends Controller
                 'phone' => $customer->phone,
             ]
         ]);
+    }
+    // In OrderController.php
+    public function deleteItem(Order $order, $itemId)
+    {
+        // Find the order item (book) using the given item ID
+        $item = $order->items()->findOrFail($itemId);
+
+        // Restore stock quantity to the book
+        $book = $item->book;
+        $book->increment('stock_quantity', $item->quantity);
+
+        // Delete the order item
+        $item->delete();
+
+        // Recalculate the total amount for the order
+        $totalAmount = $order->items->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+
+        // Update the total amount of the order
+        $order->update(['total_amount' => $totalAmount]);
+
+        // Return a success response
+        return response()->json(['success' => true]);
     }
 }

@@ -51,14 +51,12 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-{{--
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="./index.html" class="nav-link">
                                 <i class="fas fa-credit-card nav-icon"></i>
                                 <p>Payments</p>
                             </a>
                         </li> --}}
-
                     </ul>
                 </li>
                 <li class="nav-item menu-open">
@@ -129,10 +127,10 @@
                 </li>
                 <li class="nav-item menu-open">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-book-open"></i>
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
                             Payment & Order
-                            <i class="nav-icon fas fa-cogs"></i>
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
 
@@ -146,7 +144,7 @@
                     </ul>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('order.index') }}" class="nav-link">
+                            <a href="{{ route('payments.index') }}" class="nav-link">
                                 <i class="fas fa-credit-card nav-icon"></i>
 
                                 <p>Payment</p>
@@ -154,7 +152,17 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-sliders-h"></i> <!-- Alternative settings icon -->
+                        <p>
+                            Setting
+                        </p>
+                    </a>
+                </li>
+
             </ul>
+
         </nav>
         <!-- /.sidebar-menu -->
     </div>

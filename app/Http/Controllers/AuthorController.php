@@ -24,6 +24,7 @@ class AuthorController extends Controller
     // Show the form for creating a new author
     public function create()
     {
+
         return view('backend.author.create');
     }
 
@@ -32,6 +33,7 @@ class AuthorController extends Controller
     public function store(Request $request)
     {
         // Validate incoming request
+
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -50,16 +52,16 @@ class AuthorController extends Controller
             'phone_number' => $request->phone_number,
         ]);
 
-
+        // Check if the request has a valid profile image
         if ($request->hasFile('profile_image') && $request->file('profile_image')->isValid()) {
-            // Generate unique filename
+            // Generate a unique filename for the uploaded image
             $file = $request->file('profile_image');
             $fileName = time() . '_' . $file->getClientOriginalName();
 
-            // Move file to the public/images/profile-photos directory
+            // Move the image to the public/images/profile_images directory
             $file->move(public_path('img/profile_images'), $fileName);
 
-            // Save relative path to database
+            // Save the relative path to the profile image in the database
             $author->profile_image = 'img/profile_images/' . $fileName;
             $author->save();
         }
@@ -67,6 +69,7 @@ class AuthorController extends Controller
         // Redirect to the authors index with a success message
         return redirect()->route('author.index')->with('success', 'Author created successfully.');
     }
+
 
 
     // Show the form for editing an author

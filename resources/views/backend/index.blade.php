@@ -25,31 +25,30 @@
                 <!-- Info boxes -->
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-danger elevation-1">
+                                <i class="fas fa-calendar-day"></i>
+                            </span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total's Order</span>
+                                <span class="info-box-number">
+                                    {{ $totalOrders }} Orders
+                                    <a href="{{ route('order.index') }}" class="btn btn-sm btn-link">View More</a>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
                         <div class="info-box">
                             <span class="info-box-icon bg-info elevation-1"> <i class="fas fa-dollar-sign"></i></span>
-
                             <div class="info-box-content">
-                                <span class="info-box-text">Total Order</span>
+                                <span class="info-box-text">Total's Sale</span>
                                 <span class="info-box-number">
                                     {{-- ${{ number_format($totalPrice, 2) }} <!-- Format the total price --> --}}
-                                    <span class="info-box-number">$</span>
+                                    <span class="info-box-number"> ${{ number_format($totalOrderPrice, 2) }} <!-- Format to 2 decimal places -->
+                                        <a href="{{ route('order.index') }}" class="btn btn-sm btn-link">View More</a></span>
                                 </span>
                             </div>
-
                             <!-- /.info-box-content -->
                         </div>
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-primary elevation-1">
-                                <i class="fas fa-book"></i>
-                            </span>
-
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Number of Genres</span>
-                                <span class="info-box-number">Genres</span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-
                         <!-- /.info-box -->
                     </div>
                     <!-- /.col -->
@@ -60,12 +59,46 @@
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Today's Order</span>
+                                <span class="info-box-text">Weekly Order</span>
                                 <span class="info-box-number">$</span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-primary elevation-1">
+                                <i class="fas fa-book"></i>
+                            </span>
 
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Number of Genres</span>
+                                <span class="info-box-number"> {{ $totalGenres }} Genres
+                                    <a href="{{ route('genre.index') }}" class="btn btn-sm btn-link"></a></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1">
+                                <i class="fas fa-shopping-cart" style="color: white;"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Books in Stock & Inventory</span>
+                                <span class="info-box-number">
+                                    {{ $booksInStock->count() }} Books
+                                    <a href="{{ route('book.in-stock') }}" class="btn btn-sm btn-link">View More</a>
+                                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-success elevation-1">
                                 <i class="fas fa-users" style="color: white;"></i>
@@ -77,77 +110,15 @@
                             </div>
                             <!-- /.info-box-content -->
                         </div>
-
-
-                        <!-- /.info-box -->
-                    </div>
-
-                    <!-- /.col -->
-
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-
-                    <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-warning elevation-1">
-                                <i class="fas fa-shopping-cart" style="color: white;"></i>
-                            </span>
-
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Books in Inventory</span>
-                                <span class="info-box-number">{{ $bookCount }} Books</span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-gray elevation-1">
-                                <i class="fas fa-bookmark" style="color: white;"></i>
-                            </span>
-
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Books in Stock</span>
-                                <span class="info-box-number">
-                                    {{ $booksInStock->count() }} Books
-                                    <a href="{{ route('book.in-stock') }}" class="btn btn-sm btn-link">View More</a>
-
-                                </span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-
-
-
-
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon" style="background-color: orange; elevation-1;">
-                                <i class="fas fa-dollar-sign" style="color: white;"></i>
-                            </span>
-
-                            <div class="info-box-content">
-                                <span class="info-box-text">Total Value of all Books</span>
-                                <span class="info-box-number">$</span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-
-
-
-
-
                         <!-- /.info-box -->
                     </div>
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-
-
                         <!-- /.info-box -->
                     </div>
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
